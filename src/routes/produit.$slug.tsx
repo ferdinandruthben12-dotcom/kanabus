@@ -17,7 +17,7 @@ export const Route = createFileRoute("/produit/$slug")({
 });
 
 function ProductPage() {
-  const { product } = Route.useLoaderData();
+  const { product } = Route.useLoaderData() as { product: Product };
   const { t, lang } = useI18n();
   const [weight, setWeight] = useState(product.weights[0]);
   const related = PRODUCTS.filter((p) => p.slug !== product.slug && p.category === product.category).slice(0, 3);
