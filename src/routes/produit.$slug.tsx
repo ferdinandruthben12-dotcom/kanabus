@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
-import { getProductBySlug, PRODUCTS } from "@/lib/products";
+import { getProductBySlug, PRODUCTS, type Product } from "@/lib/products";
 import { useI18n } from "@/lib/i18n";
 import { ProductCard } from "@/components/ProductCard";
 
