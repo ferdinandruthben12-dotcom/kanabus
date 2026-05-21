@@ -1,0 +1,49 @@
+import { Link } from "@tanstack/react-router";
+import { useI18n } from "@/lib/i18n";
+import type { Product } from "@/lib/products";
+
+export function ProductCard({ product }: { product: Product }) {
+  const { lang, t } = useI18n();
+  return (
+    <Link
+      to="/produit/$slug"
+      params={{ slug: product.slug }}
+      className="group block"
+    >
+      <div className="relative aspect-[4/5] bg-sand overflow-hidden mb-4">
+        <img
+          src={product.image}
+          alt={product.name}
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        />
+        {product.badge && (
+          <span className="absolute top-3 left-3 px-2 py-1 bg-forest text-background text-[10px] font-mono uppercase tracking-widest">
+            {product.badge[lang]}
+          </span>
+        )}
+        <span className="absolute top-3 right-3 bg-background/90 px-2 py-1 text-[10px] font-mono uppercase tracking-widest text-foreground">
+          {product.cbd}
+          {product.cbdUnit ?? "%"} CBD
+        </span>
+      </div>
+      <div className="flex justify-between items-start gap-3">
+        <div className="min-w-0">
+          <h3 className="font-display italic text-2xl leading-tight">{product.name}</h3>
+          <p className="text-[11px] font-mono uppercase tracking-widest text-foreground/50 mt-1">
+            {product.categoryLabel[lang]}
+          </p>
+        </div>
+        <div className="text-right shrink-0">
+          <p className="font-mono text-sm">${product.priceUSD.toFixed(2)}</p>
+          <p className="text-[10px] font-mono text-foreground/40">
+            ≈ {product.priceHTG.toLocaleString()} HTG
+          </p>
+        </div>
+      </div>
+      <span className="mt-4 inline-block border-b border-foreground pb-1 text-[10px] font-mono uppercase tracking-widest group-hover:border-accent group-hover:text-accent transition-colors">
+        {t("product.add")} →
+      </span>
+    </Link>
+  );
+}
