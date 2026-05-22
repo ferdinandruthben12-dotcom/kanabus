@@ -63,24 +63,6 @@ export const getAdminStats = createServerFn({ method: "GET" })
   });
 
 // ---------- Products ----------
-const productSchema = z.object({
-  id: z.string().uuid().optional(),
-  slug: z.string().min(1).max(120).regex(/^[a-z0-9-]+$/),
-  name: z.string().min(1).max(200),
-  category: z.string().min(1).max(60),
-  description_fr: z.string().max(4000).optional().nullable(),
-  description_kr: z.string().max(4000).optional().nullable(),
-  cbd_value: z.number().nullable().optional(),
-  cbd_unit: z.string().max(8).optional().nullable(),
-  price_usd: z.number().min(0),
-  price_htg: z.number().min(0),
-  stock: z.number().int().min(0),
-  origin: z.string().max(200).optional().nullable(),
-  image_url: z.string().max(2000).optional().nullable(),
-  status: z.enum(["draft", "published", "archived"]),
-  badge_fr: z.string().max(60).optional().nullable(),
-  badge_kr: z.string().max(60).optional().nullable(),
-});
 
 export const listProducts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
