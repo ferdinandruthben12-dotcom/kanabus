@@ -190,7 +190,7 @@ export const upsertPost = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertStaff(context.userId);
     const { id, ...rest } = data;
-    const payload: Record<string, unknown> = {
+    const payload = {
       ...rest,
       author_id: context.userId,
       published_at: rest.status === "published" ? new Date().toISOString() : null,
