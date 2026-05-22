@@ -171,6 +171,7 @@ const postSchema = z.object({
   cover_image_url: z.string().max(2000).optional().nullable(),
   status: z.enum(["draft", "published"]),
 });
+export type PostInput = z.infer<typeof postSchema>;
 
 export const listPosts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
