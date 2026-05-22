@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import type { PostInput } from "@/lib/admin.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listPosts, upsertPost, deletePost } from "@/lib/admin.functions";
@@ -26,7 +27,7 @@ function BlogPage() {
   const [open, setOpen] = useState(false);
 
   const saveMut = useMutation({
-    mutationFn: (d: Parameters<typeof upsert>[0]["data"]) => upsert({ data: d }),
+    mutationFn: (d: PostInput) => upsert({ data: d }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-posts"] });
       qc.invalidateQueries({ queryKey: ["admin-stats"] });
@@ -105,7 +106,7 @@ function PostDialog({
   saving,
 }: {
   editing: PostRow | null;
-  onSave: (d: Parameters<typeof upsertPost>[0]["data"]) => void;
+  onSave: (d: PostInput) => void;
   saving: boolean;
 }) {
   const [form, setForm] = useState(() => ({

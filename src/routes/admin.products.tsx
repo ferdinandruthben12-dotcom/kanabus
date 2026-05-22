@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import type { ProductInput } from "@/lib/admin.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listProducts, upsertProduct, deleteProduct } from "@/lib/admin.functions";
@@ -26,7 +27,7 @@ function ProductsPage() {
   const [open, setOpen] = useState(false);
 
   const saveMut = useMutation({
-    mutationFn: (d: Parameters<typeof upsert>[0]["data"]) => upsert({ data: d }),
+    mutationFn: (d: ProductInput) => upsert({ data: d }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-products"] });
       qc.invalidateQueries({ queryKey: ["admin-stats"] });
@@ -127,7 +128,7 @@ function ProductDialog({
   saving,
 }: {
   editing: ProductRow | null;
-  onSave: (d: Parameters<typeof upsertProduct>[0]["data"]) => void;
+  onSave: (d: ProductInput) => void;
   saving: boolean;
 }) {
   const [form, setForm] = useState(() => ({
