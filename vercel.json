@@ -1,6 +1,12 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": ".output/static",
+  "framework": null,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/(.*)",
+      "destination": "/.output/server/index.mjs"
+    }
   ]
 }
