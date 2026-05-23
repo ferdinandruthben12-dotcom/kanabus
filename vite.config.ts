@@ -7,7 +7,9 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  // By removing the cloudflare-specific server entry, 
-  // TanStack Start will use the default Nitro deployment logic,
-  // which works seamlessly with Vercel's auto-detection.
+  tanstackStart: {
+    server: {
+      preset: "vercel",
+    },
+  },
 });
