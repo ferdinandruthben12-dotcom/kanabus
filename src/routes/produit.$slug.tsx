@@ -1,12 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
-import { getProductBySlug, PRODUCTS, type Product } from "@/lib/products";
+import { getProductBySlug, fetchProducts, type Product } from "@/lib/products";
 import { useI18n } from "@/lib/i18n";
 import { ProductCard } from "@/components/ProductCard";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/produit/$slug")({
-  loader: ({ params }) => {
-    const product = getProductBySlug(params.slug);
+  loader: async ({ params }) => {
+    const product = await getProductBySlug(params.slug);
     if (!product) throw notFound();
     return { product };
   },
@@ -20,6 +21,12 @@ function ProductPage() {
   const { product } = Route.useLoaderData() as { product: Product };
   const { t, lang } = useI18n();
   const [weight, setWeight] = useState(product.weights[0]);
+
+  const { data: PRODUCTS = [] } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
+
   const related = PRODUCTS.filter((p) => p.slug !== product.slug && p.category === product.category).slice(0, 3);
   const fallback = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
 

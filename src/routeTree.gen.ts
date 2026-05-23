@@ -14,12 +14,16 @@ import { Route as LivraisonRouteImport } from './routes/livraison'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CompteRouteImport } from './routes/compte'
 import { Route as BoutiqueRouteImport } from './routes/boutique'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CompteIndexRouteImport } from './routes/compte.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProduitSlugRouteImport } from './routes/produit.$slug'
+import { Route as CompteCommandesRouteImport } from './routes/compte.commandes'
+import { Route as CompteAdressesRouteImport } from './routes/compte.adresses'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminContactsRouteImport } from './routes/admin.contacts'
@@ -50,6 +54,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompteRoute = CompteRouteImport.update({
+  id: '/compte',
+  path: '/compte',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BoutiqueRoute = BoutiqueRouteImport.update({
   id: '/boutique',
   path: '/boutique',
@@ -70,6 +79,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompteIndexRoute = CompteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CompteRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -79,6 +93,16 @@ const ProduitSlugRoute = ProduitSlugRouteImport.update({
   id: '/produit/$slug',
   path: '/produit/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const CompteCommandesRoute = CompteCommandesRouteImport.update({
+  id: '/commandes',
+  path: '/commandes',
+  getParentRoute: () => CompteRoute,
+} as any)
+const CompteAdressesRoute = CompteAdressesRouteImport.update({
+  id: '/adresses',
+  path: '/adresses',
+  getParentRoute: () => CompteRoute,
 } as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
@@ -106,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/a-propos': typeof AProposRoute
   '/admin': typeof AdminRouteWithChildren
   '/boutique': typeof BoutiqueRoute
+  '/compte': typeof CompteRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/legal': typeof LegalRoute
@@ -115,8 +140,11 @@ export interface FileRoutesByFullPath {
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/compte/adresses': typeof CompteAdressesRoute
+  '/compte/commandes': typeof CompteCommandesRoute
   '/produit/$slug': typeof ProduitSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/compte/': typeof CompteIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -131,8 +159,11 @@ export interface FileRoutesByTo {
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/compte/adresses': typeof CompteAdressesRoute
+  '/compte/commandes': typeof CompteCommandesRoute
   '/produit/$slug': typeof ProduitSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/compte': typeof CompteIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -140,6 +171,7 @@ export interface FileRoutesById {
   '/a-propos': typeof AProposRoute
   '/admin': typeof AdminRouteWithChildren
   '/boutique': typeof BoutiqueRoute
+  '/compte': typeof CompteRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/legal': typeof LegalRoute
@@ -149,8 +181,11 @@ export interface FileRoutesById {
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/compte/adresses': typeof CompteAdressesRoute
+  '/compte/commandes': typeof CompteCommandesRoute
   '/produit/$slug': typeof ProduitSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/compte/': typeof CompteIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -159,6 +194,7 @@ export interface FileRouteTypes {
     | '/a-propos'
     | '/admin'
     | '/boutique'
+    | '/compte'
     | '/contact'
     | '/faq'
     | '/legal'
@@ -168,8 +204,11 @@ export interface FileRouteTypes {
     | '/admin/contacts'
     | '/admin/orders'
     | '/admin/products'
+    | '/compte/adresses'
+    | '/compte/commandes'
     | '/produit/$slug'
     | '/admin/'
+    | '/compte/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,14 +223,18 @@ export interface FileRouteTypes {
     | '/admin/contacts'
     | '/admin/orders'
     | '/admin/products'
+    | '/compte/adresses'
+    | '/compte/commandes'
     | '/produit/$slug'
     | '/admin'
+    | '/compte'
   id:
     | '__root__'
     | '/'
     | '/a-propos'
     | '/admin'
     | '/boutique'
+    | '/compte'
     | '/contact'
     | '/faq'
     | '/legal'
@@ -201,8 +244,11 @@ export interface FileRouteTypes {
     | '/admin/contacts'
     | '/admin/orders'
     | '/admin/products'
+    | '/compte/adresses'
+    | '/compte/commandes'
     | '/produit/$slug'
     | '/admin/'
+    | '/compte/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -210,6 +256,7 @@ export interface RootRouteChildren {
   AProposRoute: typeof AProposRoute
   AdminRoute: typeof AdminRouteWithChildren
   BoutiqueRoute: typeof BoutiqueRoute
+  CompteRoute: typeof CompteRouteWithChildren
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   LegalRoute: typeof LegalRoute
@@ -255,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compte': {
+      id: '/compte'
+      path: '/compte'
+      fullPath: '/compte'
+      preLoaderRoute: typeof CompteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/boutique': {
       id: '/boutique'
       path: '/boutique'
@@ -283,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compte/': {
+      id: '/compte/'
+      path: '/'
+      fullPath: '/compte/'
+      preLoaderRoute: typeof CompteIndexRouteImport
+      parentRoute: typeof CompteRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -296,6 +357,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/produit/$slug'
       preLoaderRoute: typeof ProduitSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/compte/commandes': {
+      id: '/compte/commandes'
+      path: '/commandes'
+      fullPath: '/compte/commandes'
+      preLoaderRoute: typeof CompteCommandesRouteImport
+      parentRoute: typeof CompteRoute
+    }
+    '/compte/adresses': {
+      id: '/compte/adresses'
+      path: '/adresses'
+      fullPath: '/compte/adresses'
+      preLoaderRoute: typeof CompteAdressesRouteImport
+      parentRoute: typeof CompteRoute
     }
     '/admin/products': {
       id: '/admin/products'
@@ -346,11 +421,27 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface CompteRouteChildren {
+  CompteAdressesRoute: typeof CompteAdressesRoute
+  CompteCommandesRoute: typeof CompteCommandesRoute
+  CompteIndexRoute: typeof CompteIndexRoute
+}
+
+const CompteRouteChildren: CompteRouteChildren = {
+  CompteAdressesRoute: CompteAdressesRoute,
+  CompteCommandesRoute: CompteCommandesRoute,
+  CompteIndexRoute: CompteIndexRoute,
+}
+
+const CompteRouteWithChildren =
+  CompteRoute._addFileChildren(CompteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   AdminRoute: AdminRouteWithChildren,
   BoutiqueRoute: BoutiqueRoute,
+  CompteRoute: CompteRouteWithChildren,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   LegalRoute: LegalRoute,
@@ -361,3 +452,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

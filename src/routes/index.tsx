@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroFlower from "@/assets/hero-flower.jpg";
-import { CATEGORIES, PRODUCTS } from "@/lib/products";
+import { CATEGORIES, fetchProducts } from "@/lib/products";
 import { useI18n } from "@/lib/i18n";
 import { ProductCard } from "@/components/ProductCard";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -10,7 +11,13 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { t, lang } = useI18n();
-  const featured = PRODUCTS.find((p) => p.slug === "hibiscus-gold")!;
+  
+  const { data: PRODUCTS = [], isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
+
+  const featured = PRODUCTS.find((p) => p.slug === "hibiscus-gold") || PRODUCTS[0];
   const essentials = PRODUCTS.slice(0, 6);
 
   return (
@@ -98,60 +105,68 @@ function Home() {
             <h2 className="font-display italic text-4xl md:text-6xl">{t("section.essentials")}</h2>
             <span className="font-mono text-[10px] uppercase tracking-widest text-foreground/40">SEL_001 / {PRODUCTS.length.toString().padStart(3, "0")}</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-            {essentials.map((p) => <ProductCard key={p.slug} product={p} />)}
-          </div>
+          {isLoading ? (
+            <div className="py-20 flex justify-center">
+              <p className="font-mono text-[11px] uppercase tracking-widest animate-pulse">Chargement...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+              {essentials.map((p) => <ProductCard key={p.slug} product={p} />)}
+            </div>
+          )}
         </div>
       </section>
 
       {/* FEATURED PRODUCT */}
-      <section className="bg-forest text-background py-20 md:py-28 grain">
-        <div className="max-w-[1400px] mx-auto px-5 md:px-10 grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-          <div className="relative">
-            <div className="aspect-[4/5] overflow-hidden bg-bark">
-              <img src={featured.image} alt={featured.name} loading="lazy" className="w-full h-full object-cover" />
-            </div>
-            <div className="absolute -bottom-6 -right-4 md:-right-6 bg-accent w-36 h-36 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center text-center leading-tight text-background">
-              <span className="font-mono text-[10px] opacity-90 uppercase tracking-widest">{t("product.cbd")}</span>
-              <span className="text-4xl md:text-5xl font-display italic">{featured.cbd}%</span>
-            </div>
-          </div>
-          <div className="flex flex-col gap-7">
-            <span className="font-mono text-accent text-[11px] tracking-[0.3em] uppercase">
-              {featured.badge?.[lang] ?? t("section.featured")}
-            </span>
-            <h2 className="text-5xl md:text-7xl font-display italic leading-[0.95]">{featured.name}</h2>
-            <div className="flex flex-wrap gap-2 font-mono text-[11px] text-background/60">
-              {featured.effects[lang].map((e) => (
-                <span key={e} className="border border-background/20 px-3 py-1 uppercase tracking-widest">{e}</span>
-              ))}
-            </div>
-            <p className="text-base md:text-lg text-background/70 leading-relaxed max-w-prose">
-              {featured.description[lang]}
-            </p>
-            <div className="grid grid-cols-2 border-t border-background/10 pt-7 gap-10">
-              <div>
-                <span className="block font-mono text-[10px] text-background/40 uppercase mb-2">{t("product.terpenes")}</span>
-                <ul className="font-sans text-sm space-y-1">
-                  {featured.terpenes.map((t) => <li key={t}>{t}</li>)}
-                </ul>
+      {featured && (
+        <section className="bg-forest text-background py-20 md:py-28 grain">
+          <div className="max-w-[1400px] mx-auto px-5 md:px-10 grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+            <div className="relative">
+              <div className="aspect-[4/5] overflow-hidden bg-bark">
+                <img src={featured.image} alt={featured.name} loading="lazy" className="w-full h-full object-cover" />
               </div>
-              <div>
-                <span className="block font-mono text-[10px] text-background/40 uppercase mb-2">Prix</span>
-                <span className="text-3xl font-display italic">${featured.priceUSD}</span>
-                <span className="block text-[10px] font-mono text-background/40">≈ {featured.priceHTG.toLocaleString()} HTG</span>
+              <div className="absolute -bottom-6 -right-4 md:-right-6 bg-accent w-36 h-36 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center text-center leading-tight text-background">
+                <span className="font-mono text-[10px] opacity-90 uppercase tracking-widest">{t("product.cbd")}</span>
+                <span className="text-4xl md:text-5xl font-display italic">{featured.cbd}%</span>
               </div>
             </div>
-            <Link
-              to="/produit/$slug"
-              params={{ slug: featured.slug }}
-              className="text-center py-5 bg-background text-forest font-bold uppercase text-[11px] tracking-[0.2em] hover:bg-accent hover:text-background transition-colors"
-            >
-              {t("product.add")}
-            </Link>
+            <div className="flex flex-col gap-7">
+              <span className="font-mono text-accent text-[11px] tracking-[0.3em] uppercase">
+                {featured.badge?.[lang] ?? t("section.featured")}
+              </span>
+              <h2 className="text-5xl md:text-7xl font-display italic leading-[0.95]">{featured.name}</h2>
+              <div className="flex flex-wrap gap-2 font-mono text-[11px] text-background/60">
+                {featured.effects[lang].map((e) => (
+                  <span key={e} className="border border-background/20 px-3 py-1 uppercase tracking-widest">{e}</span>
+                ))}
+              </div>
+              <p className="text-base md:text-lg text-background/70 leading-relaxed max-w-prose">
+                {featured.description[lang]}
+              </p>
+              <div className="grid grid-cols-2 border-t border-background/10 pt-7 gap-10">
+                <div>
+                  <span className="block font-mono text-[10px] text-background/40 uppercase mb-2">{t("product.terpenes")}</span>
+                  <ul className="font-sans text-sm space-y-1">
+                    {featured.terpenes.map((t) => <li key={t}>{t}</li>)}
+                  </ul>
+                </div>
+                <div>
+                  <span className="block font-mono text-[10px] text-background/40 uppercase mb-2">Prix</span>
+                  <span className="text-3xl font-display italic">${featured.priceUSD}</span>
+                  <span className="block text-[10px] font-mono text-background/40">≈ {featured.priceHTG.toLocaleString()} HTG</span>
+                </div>
+              </div>
+              <Link
+                to="/produit/$slug"
+                params={{ slug: featured.slug }}
+                className="text-center py-5 bg-background text-forest font-bold uppercase text-[11px] tracking-[0.2em] hover:bg-accent hover:text-background transition-colors"
+              >
+                {t("product.add")}
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* PHILOSOPHY */}
       <section className="py-24 md:py-32 px-5 md:px-10">

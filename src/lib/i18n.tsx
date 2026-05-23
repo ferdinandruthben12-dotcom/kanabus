@@ -11,6 +11,9 @@ const dict: Dict = {
   "nav.contact": { fr: "Contact", kr: "Kontak" },
   "nav.delivery": { fr: "Livraison", kr: "Livrezon" },
   "nav.cart": { fr: "Panier", kr: "Pànye" },
+  "nav.account": { fr: "Compte", kr: "Kont" },
+  "nav.address": { fr: "Adresses", kr: "Adrès" },
+  "nav.orders": { fr: "Mes Commandes", kr: "Kòmand mwen yo" },
 
   "hero.title.l1": { fr: "L'Or Vert", kr: "Lò Vèt" },
   "hero.title.l2": { fr: "du Cap.", kr: "nan Kap la." },

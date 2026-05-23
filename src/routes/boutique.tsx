@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { CATEGORIES, PRODUCTS, type Product } from "@/lib/products";
+import { CATEGORIES, fetchProducts, type Product } from "@/lib/products";
 import { ProductCard } from "@/components/ProductCard";
 import { useI18n } from "@/lib/i18n";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/boutique")({
   component: Boutique,
@@ -16,13 +17,18 @@ function Boutique() {
   const [cat, setCat] = useState<Product["category"] | "all">("all");
   const [sort, setSort] = useState<Sort>("default");
 
+  const { data: allProducts = [], isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
+
   const products = useMemo(() => {
-    const list = cat === "all" ? [...PRODUCTS] : PRODUCTS.filter((p) => p.category === cat);
+    const list = cat === "all" ? [...allProducts] : allProducts.filter((p) => p.category === cat);
     if (sort === "cbd") list.sort((a, b) => b.cbd - a.cbd);
     if (sort === "price-asc") list.sort((a, b) => a.priceUSD - b.priceUSD);
     if (sort === "price-desc") list.sort((a, b) => b.priceUSD - a.priceUSD);
     return list;
-  }, [cat, sort]);
+  }, [cat, sort, allProducts]);
 
   return (
     <div className="pt-28 md:pt-32">
@@ -75,7 +81,11 @@ function Boutique() {
       </div>
 
       <section className="px-5 md:px-10 max-w-[1400px] mx-auto py-14 grain">
-        {products.length === 0 ? (
+        {isLoading ? (
+          <div className="py-20 flex justify-center">
+            <p className="font-mono text-[11px] uppercase tracking-widest animate-pulse">Chargement des produits...</p>
+          </div>
+        ) : products.length === 0 ? (
           <p className="text-center font-mono uppercase tracking-widest text-foreground/50 py-20">Aucun produit.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-14">

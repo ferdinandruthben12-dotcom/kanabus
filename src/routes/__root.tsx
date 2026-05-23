@@ -13,6 +13,7 @@ import { I18nProvider } from "@/lib/i18n";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { AgeGate } from "@/components/AgeGate";
+import { ChatWidget } from "@/components/ChatWidget";
 
 function NotFoundComponent() {
   return (
@@ -79,9 +80,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "KanaBus — CBD Lifestyle premium à Cap-Haïtien" },
-      { name: "description", content: "TropiBliss CBD is a premium e-commerce platform for lifestyle CBD products in Haiti." },
-      { property: "og:description", content: "TropiBliss CBD is a premium e-commerce platform for lifestyle CBD products in Haiti." },
-      { name: "twitter:description", content: "TropiBliss CBD is a premium e-commerce platform for lifestyle CBD products in Haiti." },
+      { name: "description", content: "KanaBus is a premium e-commerce platform for lifestyle CBD products in Haiti." },
+      { property: "og:description", content: "KanaBus is a premium e-commerce platform for lifestyle CBD products in Haiti." },
+      { name: "twitter:description", content: "KanaBus is a premium e-commerce platform for lifestyle CBD products in Haiti." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/920c8833-0e5e-442a-8482-6153958a5b6e/id-preview-912ad1aa--016a19c6-b457-4794-ba56-3e7bfedfc17d.lovable.app-1779402785382.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/920c8833-0e5e-442a-8482-6153958a5b6e/id-preview-912ad1aa--016a19c6-b457-4794-ba56-3e7bfedfc17d.lovable.app-1779402785382.png" },
     ],
@@ -135,6 +136,7 @@ function LayoutShell() {
         <Outlet />
       </main>
       <Footer />
+      <ChatWidget />
     </>
   );
 }
